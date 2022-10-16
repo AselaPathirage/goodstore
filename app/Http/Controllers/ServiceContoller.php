@@ -28,4 +28,10 @@ class ServiceController extends Controller
 
         return view('Servicequickview', ['Service' => $Service]);
     }
+
+    public function postserviceAd(Request $request)
+    {
+        $Service = $request->session()->get('Service');
+        return view('ad.Service.create-step1', compact('Service', $vehicle));
+    }
 }
