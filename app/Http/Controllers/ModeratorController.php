@@ -28,5 +28,27 @@ class ModeratorController extends Controller
         return view('Moderator.login');
     }
 
+    public function auth(Request $request)
+    {
+        $email = $request->post('email');
+        $password = $request->post('password');
+
+        // $result=Moderator::where(['email'=>$email,'password'=>$password])->get();
+        $result = Moderator::where(['email' => $email])->first();
+        if ($result) {
+            if (Hash::check($request->post('password'), $result->password)) {
+                $request->session()->put('Moderator_LOGIN', true);
+                $request->session()->put('Moderator_ID', $result->id);
+                return redirect('Moderator/dashboard');
+            } else {
+                $request->session()->flash('error', 'Please enter correct password');
+                return redirect('Moderator');
+            }
+        } else {
+            $request->session()->flash('error', 'Please enter valid login details');
+            return redirect('Moderator');
+        }
+    }
+
     
 }
