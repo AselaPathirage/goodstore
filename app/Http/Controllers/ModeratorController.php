@@ -50,5 +50,16 @@ class ModeratorController extends Controller
         }
     }
 
+     /**
+     * Show the step 2 Form for creating a new product.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function createStep2(Request $request)
+    {
+        $vehicle = $request->session()->get('vehicle');
+        return view('ad.vehicle.create-step2', compact('vehicle', $vehicle));
+    }
     
 }
