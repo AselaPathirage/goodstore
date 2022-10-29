@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Vehicle;
 use App\Models\Property;
+use App\Models\Rent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -169,5 +170,27 @@ class AdminController extends Controller
         }
         $property->delete();
         return redirect('admin/properties');
+    }
+    public function rents()
+    {
+        $properties = DB::table('rents')
+            ->join('users', 'rents.userid', '=', 'users.id')
+            ->select('rents.*', 'users.email', 'users.name')
+            ->where('approved', '=', 0)
+            ->get();
+        // $vehicles = Vehicle::all()->where('approved', '=', 0);
+        return view('admin.properties', compact('properties', $properties));
+    }
+    public function rentapp($id)
+    {
+        $page = Rent::find($id);
+
+        // Make sure you've got the Page model
+        if ($page) {
+            $page->approved = '1';
+            $page->save();
+        }
+        // $vehicles = Vehicle::all()->where('approved', '=', 0);
+        return redirect('admin/rents');
     }
 }
